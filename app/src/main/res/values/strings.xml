@@ -4,8 +4,6 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
     <string name="pref_enable_server_discovery_label">Automatically discover server</string>
     <string name="pref_enable_server_discovery_key">server_discovery</string>
     <string name="pref_server_discovery_port_label">Server discovery port</string>
@@ -14,4 +12,10 @@
     <string name="pref_server_address_default">192.168.1.104</string>
     <string name="pref_server_address_label">Server address</string>
     <string name="pref_server_address_key">server_address</string>
+
+    <string name="close">Close</string>
+    <string name="message">Message</string>
+    <string name="running">Running...</string>
+    <string name="service_name">PASS Service</string>
+    <string name="running_as_foreground">Running as foreground...</string>
 </resources>
