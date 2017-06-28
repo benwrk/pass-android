@@ -29,7 +29,7 @@ public class PassService extends Service {
     public static final int PASS_SERVICE_NOTIFICATION_ID = 9898;
     private static final int TOAST_DURATION = 5;
     private static final int TOAST_SPLIT_LENGTH = 80;
-    private static final int HANDSHAKE_TIMER = 300;
+    private static final int HANDSHAKE_TIMER = 45;
     private static final short PASS_CLIENT_LISTEN_PORT = 1257;
     private static final String PASS_CLIENT_MESSAGE_SIGNATURE = "PASS_MSG" + PassNetworking.DELIMITER;
 
