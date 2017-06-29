@@ -32,6 +32,8 @@ public class PassService extends Service {
     private static final int HANDSHAKE_TIMER = 45;
     private static final short PASS_CLIENT_LISTEN_PORT = 1257;
     private static final String PASS_CLIENT_MESSAGE_SIGNATURE = "PASS_MSG" + PassNetworking.DELIMITER;
+    private DatagramSocket datagramSocket;
+    private boolean socketClosedCleanly = false;
 
     private AsyncTask<Void, String, Void> listeningTask = null;
     private PassNetworking networking = null;
@@ -90,6 +92,10 @@ public class PassService extends Service {
                 if (listeningTask != null) {
                     listeningTask.cancel(true);
                 }
+                if (datagramSocket != null) {
+                    datagramSocket.close();
+                    socketClosedCleanly = true;
+                }
                 startListening();
             }
         }, 0, HANDSHAKE_TIMER * 1000);
@@ -97,13 +103,13 @@ public class PassService extends Service {
 
     private void startListening() {
         listeningTask = new AsyncTask<Void, String, Void>() {
-            private DatagramSocket datagramSocket;
+//            private DatagramSocket datagramSocket;
 
             @Override
             protected void onCancelled() {
-                if (datagramSocket != null) {
-                    datagramSocket.close();
-                }
+//                if (datagramSocket != null) {
+//                    datagramSocket.close();
+//                }
             }
 
             @Override
@@ -134,15 +140,7 @@ public class PassService extends Service {
                     while (true) {
                         byte[] receivedData = new byte[1024];
                         DatagramPacket datagramPacket = new DatagramPacket(receivedData, receivedData.length);
-                        if (listeningTask != this) {
-                            datagramSocket.close();
-                            break;
-                        }
                         datagramSocket.receive(datagramPacket);
-                        if (listeningTask != this) {
-                            datagramSocket.close();
-                            break;
-                        }
 
                         String received = new String(datagramPacket.getData(), "UTF-8").trim();
 
@@ -154,7 +152,10 @@ public class PassService extends Service {
                         publishProgress(received);
                     }
                 } catch (IOException e) {
-                    Log.e(TAG, "Error listening for incoming connections!", e);
+                    if (!socketClosedCleanly) {
+                        Log.e(TAG, "Error listening for incoming connections!", e);
+                    }
+                    socketClosedCleanly = false;
                 }
                 return null;
             }
